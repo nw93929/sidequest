@@ -40,7 +40,6 @@ def build_quests():
             "location": loc_name,
             "distance_mi": dist,
             "start_time": start.strftime("%I:%M %p"),
-            "start_dt": start,
             "host": random.choice(hosts),
             "spots_total": spots_total,
             "spots_taken": spots_taken,
