@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 from quest_data import get_quest_df
 
 st.set_page_config(page_title="Sidequest", page_icon="⚔️", layout="centered")
@@ -110,3 +111,35 @@ with st.expander("View as table"):
     display_df = filtered[["title", "category", "location", "distance_mi", "start_time", "spots_left"]].copy()
     display_df.columns = ["Quest", "Category", "Location", "Distance (mi)", "Starts", "Spots Left"]
     st.dataframe(display_df, use_container_width=True, hide_index=True)
+
+# charts section
+st.divider()
+st.write("### Quest Insights")
+
+# chart 1: bar chart — open spots by category, filtered by distance slider
+st.write("**Open spots by category**")
+chart_distance = st.slider("Show quests within", 0.5, 10.0, 5.0, step=0.5, format="%.1f mi", key="chart_dist")
+dist_filtered = df[df["distance_mi"] <= chart_distance]
+spots_by_cat = dist_filtered.groupby("category")["spots_left"].sum().reset_index()
+spots_by_cat.columns = ["Category", "Open Spots"]
+
+fig_bar = px.bar(spots_by_cat, x="Category", y="Open Spots", color="Category",
+                 text="Open Spots")
+fig_bar.update_layout(showlegend=False, height=350, margin=dict(t=10, b=10))
+fig_bar.update_traces(textposition="outside")
+st.plotly_chart(fig_bar, use_container_width=True)
+
+# chart 2: scatter — distance vs start time, filterable by category
+st.write("**Distance vs Start Time**")
+all_cats = df["category"].unique().tolist()
+scatter_cats = st.multiselect("Filter categories", options=all_cats, default=all_cats, key="scatter_cats")
+scatter_df = df[df["category"].isin(scatter_cats)].copy() if scatter_cats else df.copy()
+
+fig_scatter = px.scatter(
+    scatter_df, x="distance_mi", y="start_time",
+    color="category", size="spots_left",
+    labels={"distance_mi": "Distance (mi)", "start_time": "Start Time", "category": "Category", "spots_left": "Spots Left"},
+    hover_data=["title", "location", "host"],
+)
+fig_scatter.update_layout(height=350, margin=dict(t=10, b=10))
+st.plotly_chart(fig_scatter, use_container_width=True)

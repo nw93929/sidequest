@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-from quest_data import get_quest_dict, get_quest_df
+from quest_data import get_quest_dict
 
 st.set_page_config(page_title="Quest Detail | Sidequest", page_icon="⚔️", layout="centered")
 
@@ -31,12 +30,7 @@ if "chat_messages" not in st.session_state:
 def load_quest_db():
     return get_quest_dict()
 
-@st.cache_data
-def load_quest_df():
-    return get_quest_df()
-
 quest_db = load_quest_db()
-quest_df = load_quest_df()
 
 # quest picker
 quest_options = {qid: f"{q['title']} — {q['location']}" for qid, q in quest_db.items()}
@@ -110,24 +104,3 @@ else:
             st.balloons()
     else:
         st.error("This quest is full.")
-
-# charts — bar + scatter for the rubric visualization requirement
-st.divider()
-st.write("### Quest Insights")
-
-st.write("**Quests by Category**")
-cat_counts = quest_df["category"].value_counts().reset_index()
-cat_counts.columns = ["Category", "Count"]
-fig_bar = px.bar(cat_counts, x="Category", y="Count", color="Category")
-fig_bar.update_layout(showlegend=False, height=300, margin=dict(t=10, b=10))
-st.plotly_chart(fig_bar, use_container_width=True)
-
-st.write("**Distance vs Open Spots**")
-fig_scatter = px.scatter(
-    quest_df, x="distance_mi", y="spots_left",
-    size="spots_total", color="category",
-    labels={"distance_mi": "Distance (mi)", "spots_left": "Spots Left", "category": "Category"},
-    hover_data=["title", "location"],
-)
-fig_scatter.update_layout(height=300, margin=dict(t=10, b=10))
-st.plotly_chart(fig_scatter, use_container_width=True)
