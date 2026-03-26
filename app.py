@@ -134,12 +134,14 @@ st.write("**Distance vs Start Time**")
 all_cats = df["category"].unique().tolist()
 scatter_cats = st.multiselect("Filter categories", options=all_cats, default=all_cats, key="scatter_cats")
 scatter_df = df[df["category"].isin(scatter_cats)].copy() if scatter_cats else df.copy()
+scatter_df = scatter_df.sort_values("start_dt")
 
 fig_scatter = px.scatter(
-    scatter_df, x="distance_mi", y="start_time",
+    scatter_df, x="distance_mi", y="start_dt",
     color="category", size="spots_left",
-    labels={"distance_mi": "Distance (mi)", "start_time": "Start Time", "category": "Category", "spots_left": "Spots Left"},
-    hover_data=["title", "location", "host"],
+    labels={"distance_mi": "Distance (mi)", "start_dt": "Start Time", "category": "Category", "spots_left": "Spots Left"},
+    hover_data=["title", "location", "host", "start_time"],
 )
+fig_scatter.update_yaxes(tickformat="%I:%M %p")
 fig_scatter.update_layout(height=350, margin=dict(t=10, b=10))
 st.plotly_chart(fig_scatter, use_container_width=True)
