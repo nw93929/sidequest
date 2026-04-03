@@ -1,0 +1,1 @@
+This is a class group project built by: Thomas Blalock, Jackson Kennedy, Hudson Noyes, Nathan Wan. the deadline for the assignment is 4/3/2026.
