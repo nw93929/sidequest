@@ -84,7 +84,7 @@ else:
                                       label_visibility="collapsed", key="chat_selector")
         selected_id = chat_ids[chat_labels.index(selected_label)]
     else:
-        idx = 0
+        selected_id = chat_ids[0]
 
     if selected_id in quest_db:
         active_quest = quest_db[selected_id]
@@ -121,10 +121,10 @@ else:
 
     messages = st.session_state.chat_messages[selected_id]
 
-        for msg in messages:
-            is_you = msg["sender"] == "You"
-            sender = "You" if is_you else msg["sender"]
-            badge = " 👑" if msg.get("is_host") and not is_you else ""
+    for msg in messages:
+        is_you = msg["sender"] == "You"
+        sender = "You" if is_you else msg["sender"]
+        badge = " 👑" if msg.get("is_host") and not is_you else ""
 
         if is_you:
             _, msg_col = st.columns([1, 3])
