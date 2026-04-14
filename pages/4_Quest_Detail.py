@@ -32,26 +32,23 @@ def load_quest_db():
 
 quest_db = load_quest_db()
 
-# quest picker
 quest_options = {qid: f"{q['title']} — {q['location']}" for qid, q in quest_db.items()}
-selected_label = st.selectbox("Select a quest", options=list(quest_options.values()), label_visibility="collapsed")
+selected_label = st.selectbox("Select a quest", options=list(quest_options.values()),
+                              label_visibility="collapsed", key="quest_picker")
 selected_id = list(quest_options.keys())[list(quest_options.values()).index(selected_label)]
 quest = quest_db[selected_id]
 
-# activity photo placeholder area like the sketch
 st.markdown(
     f"<div style='background:#f5f5f5; border-radius:12px; padding:40px; text-align:center; "
     f"color:#bbb; font-size:0.9rem; margin-bottom:16px;'>Activity photo / icon</div>",
     unsafe_allow_html=True,
 )
 
-# title + host info
 st.markdown(f"## {quest['title']} @ {quest['location']}")
 st.write(f"Hosted by **{quest['host']}** · 🟢 Active now")
 
 st.divider()
 
-# when / where row matching the sketch
 info_left, info_right = st.columns(2)
 with info_left:
     st.write("**WHEN**")
@@ -62,7 +59,6 @@ with info_right:
 
 st.divider()
 
-# attendees
 with st.expander(f"ATTENDEES · {quest['spots_taken']} going · {quest['spots_left']} spots open"):
     attendees = []
     mock_names = ["Jamie R.", "Alex T.", "Morgan K.", "Sam W.", "Riley P.", "Jordan B."]
@@ -72,13 +68,11 @@ with st.expander(f"ATTENDEES · {quest['spots_taken']} going · {quest['spots_le
         attendees.append({"Name": name, "Role": role})
     st.table(pd.DataFrame(attendees))
 
-# description
 st.write("**DESCRIPTION**")
 st.write(quest["description"])
 
 st.divider()
 
-# accept / leave button (big green button at the bottom like the sketch)
 already_joined = quest["id"] in st.session_state.joined_quests
 
 if already_joined:

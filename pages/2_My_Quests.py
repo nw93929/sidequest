@@ -26,7 +26,6 @@ if "chat_messages" not in st.session_state:
 if "left_quests" not in st.session_state:
     st.session_state.left_quests = []
 
-# cache quest lookup
 @st.cache_data
 def load_quest_db():
     return get_quest_dict()
@@ -35,7 +34,8 @@ quest_db = load_quest_db()
 
 st.markdown("# My Quests")
 
-view_mode = st.radio("View", options=["Active", "Past"], index=0, horizontal=True, label_visibility="collapsed")
+view_mode = st.radio("View", options=["Active", "Past"], index=0, horizontal=True,
+                     label_visibility="collapsed", key="my_quests_view")
 
 active_count = len(st.session_state.joined_quests) + len(st.session_state.hosted_quests)
 col1, col2 = st.columns(2)

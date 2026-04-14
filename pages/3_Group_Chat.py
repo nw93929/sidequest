@@ -4,7 +4,6 @@ from quest_data import get_quest_dict
 
 st.set_page_config(page_title="Chat | Sidequest", page_icon="⚔️", layout="centered")
 
-# dark header + green accent style matching the chat sketch
 st.markdown("""
 <style>
     .block-container { max-width: 700px; padding-top: 1rem; }
@@ -46,7 +45,6 @@ def load_quest_db():
 
 quest_db = load_quest_db()
 
-# build list of chats the user can access
 available_chats = {}
 for qid in st.session_state.joined_quests:
     if qid in quest_db:
@@ -65,15 +63,14 @@ else:
     chat_labels = list(available_chats.values())
     chat_ids = list(available_chats.keys())
 
-    # chat selector if multiple chats
     if len(available_chats) > 1:
-        selected_label = st.selectbox("Switch chat", options=chat_labels, label_visibility="collapsed")
+        selected_label = st.selectbox("Switch chat", options=chat_labels,
+                                      label_visibility="collapsed", key="chat_selector")
         selected_id = chat_ids[chat_labels.index(selected_label)]
     else:
         selected_id = chat_ids[0]
         selected_label = chat_labels[0]
 
-    # resolve quest info
     if selected_id in quest_db:
         active_quest = quest_db[selected_id]
     else:
@@ -81,7 +78,6 @@ else:
         active_quest = hosted_match[0] if hosted_match else None
 
     if active_quest:
-        # dark-style header like the sketch
         st.markdown(
             f"<div style='background:#2c2c2e; color:white; padding:16px 20px; border-radius:12px; margin-bottom:12px;'>"
             f"<strong style='font-size:1.2rem;'>⚔️ {active_quest['title']}</strong><br>"
@@ -90,7 +86,6 @@ else:
             unsafe_allow_html=True,
         )
 
-        # green location bar like the sketch
         st.markdown(
             f"<div style='background:#e8f8e8; padding:10px 14px; border-radius:8px; margin-bottom:16px; "
             f"font-size:0.9rem;'>"
@@ -99,7 +94,6 @@ else:
             unsafe_allow_html=True,
         )
 
-        # seed messages if needed
         if selected_id not in st.session_state.chat_messages:
             st.session_state.chat_messages[selected_id] = [
                 {
@@ -112,7 +106,6 @@ else:
 
         messages = st.session_state.chat_messages[selected_id]
 
-        # render chat bubbles
         for msg in messages:
             is_you = msg["sender"] == "You"
             sender = "You" if is_you else msg["sender"]
@@ -139,7 +132,6 @@ else:
                         unsafe_allow_html=True,
                     )
 
-        # message input bar at the bottom
         st.write("")
         input_col, send_col = st.columns([5, 1])
         with input_col:

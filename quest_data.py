@@ -3,10 +3,19 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 
-# shared quest data so we don't copy paste the same thing on every page
+SUBCATEGORIES = {
+    "🎲 Games": ["Board Games", "Card Games", "Video Games", "Tabletop RPG"],
+    "🏐 Sports": ["Volleyball", "Basketball", "Frisbee", "Soccer", "Running"],
+    "🍕 Food & Drink": ["Dinner", "Drinks", "Coffee", "Cooking"],
+    "🎤 Music": ["Karaoke", "Open Mic", "Concert", "Jam Session"],
+    "🥾 Outdoors": ["Hiking", "Climbing", "Biking", "Yoga"],
+    "📚 Study": ["Study Group", "Tutoring", "Reading", "Workshop"],
+}
+
+
 def build_quests():
     random.seed(42)
-    categories = ["🎲 Games", "🏐 Sports", "🍕 Food & Drink", "🎤 Music", "🥾 Outdoors", "📚 Study"]
+    categories = list(SUBCATEGORIES.keys())
     locations = [
         ("The Haven Brewery", 0.5), ("McIntire Park", 1.2), ("Downtown Mall", 0.8),
         ("Rivanna Trail", 2.4), ("Corner Cafe", 0.3), ("UVA Lawn", 1.0),
@@ -29,6 +38,7 @@ def build_quests():
     for i, title in enumerate(titles):
         loc_name, dist = random.choice(locations)
         cat = random.choice(categories)
+        subtype = random.choice(SUBCATEGORIES[cat])
         hour_offset = random.choice([0.5, 1, 1.5, 2, 3, 4])
         start = now + timedelta(hours=hour_offset)
         spots_total = random.randint(4, 12)
@@ -37,6 +47,7 @@ def build_quests():
             "id": i,
             "title": title,
             "category": cat,
+            "activity_type": subtype,
             "location": loc_name,
             "distance_mi": dist,
             "start_time": start.strftime("%I:%M %p"),
