@@ -7,18 +7,14 @@ st.set_page_config(
     page_title="Host a Quest | Sidequest", page_icon="⚔️", layout="centered",
 )
 
-st.markdown("""
-<style>
-    .block-container { max-width: 700px; padding-top: 1rem; }
-    div.stButton > button[kind="primary"] {
-        background-color: #34C759;
-        border: none;
-        border-radius: 24px;
-        font-weight: 600;
-    }
-    div.stButton > button[kind="primary"]:hover { background-color: #2DB84D; }
-</style>
-""", unsafe_allow_html=True)
+with st.sidebar:
+    st.header("⚔️ Sidequest")
+    st.caption("Spontaneous local activities")
+    st.divider()
+    st.info("💡 **Hosting tips**\n\n"
+            "• Keep titles short & fun\n"
+            "• Smaller groups (3-6) feel less intimidating\n"
+            "• A nearby location helps people find you")
 
 if "hosted_quests" not in st.session_state:
     st.session_state.hosted_quests = []
@@ -27,7 +23,16 @@ if "joined_quests" not in st.session_state:
 if "chat_messages" not in st.session_state:
     st.session_state.chat_messages = {}
 
-st.markdown("# Host a Quest")
+# header matching sketch: Cancel on left, title centered
+st.markdown(
+    "<div style='display:flex; align-items:center; justify-content:center; position:relative; margin-bottom:16px;'>"
+    "<span style='position:absolute; left:0; color:#888; font-size:0.9rem; cursor:pointer;'>Cancel</span>"
+    "<strong style='font-size:1.3rem;'>Host a Quest</strong>"
+    "</div>",
+    unsafe_allow_html=True,
+)
+
+st.divider()
 
 st.info("📝 Step 1 of 2 — Fill in quest details")
 
@@ -119,6 +124,7 @@ for err in validation_errors:
 
 has_required = bool(quest_title.strip()) and bool(quest_location.strip())
 
+# preview + publish buttons at bottom
 preview_col, publish_col = st.columns(2)
 
 with preview_col:
@@ -195,6 +201,8 @@ with publish_col:
         st.success(f'**"{quest_title}"** is live! People nearby can see it.')
         st.balloons()
 
+st.caption("*Format: select a powerfield. Preview it to check — your quest'll be public once published.*")
+
 if st.session_state.hosted_quests:
     st.divider()
     st.write("### Your Hosted Quests")
@@ -205,3 +213,5 @@ if st.session_state.hosted_quests:
     disp.columns = ["Quest", "Category", "Location", "Starts", "Spots Left"]
     st.dataframe(disp, use_container_width=True, hide_index=True)
     st.metric("Total Hosted", len(st.session_state.hosted_quests))
+
+render_bottom_nav("host")

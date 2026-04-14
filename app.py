@@ -13,6 +13,7 @@ except ImportError:
 from quest_data import get_quest_df, SUBCATEGORIES
 
 st.set_page_config(page_title="Sidequest", page_icon="⚔️", layout="centered")
+apply_custom_style()
 
 st.markdown("""
 <style>
@@ -28,6 +29,24 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+CAT_ICONS = {
+    "🎲 Games": ("🎲", "#d4ecd4"),
+    "🏐 Sports": ("🏐", "#ddd8f0"),
+    "🍕 Food & Drink": ("🍕", "#f0ddd8"),
+    "🎤 Music": ("🎤", "#f0ddd8"),
+    "🥾 Outdoors": ("🥾", "#d4ecd4"),
+    "📚 Study": ("📚", "#f0e8d4"),
+}
+
+render_top_bar()
+
+with st.sidebar:
+    st.header("⚔️ Sidequest")
+    st.caption("Spontaneous local activities")
+    st.divider()
+    st.write("📍 **Charlottesville, VA**")
+    st.caption("Location auto-detected")
 
 if "joined_quests" not in st.session_state:
     st.session_state.joined_quests = []
@@ -231,7 +250,6 @@ if advanced_mode:
         filtered = filtered[filtered["spots_left"] >= min_spots_val]
 filtered = filtered[filtered["spots_left"] > 0]
 
-st.caption(f"Nearby · {len(filtered)} quests")
 st.divider()
 
 if filtered.empty:
