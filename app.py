@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from datetime import datetime
 from quest_data import get_quest_df
 from styles import apply_custom_style, render_top_bar, render_bottom_nav
 
@@ -66,10 +67,31 @@ with col_cat:
 max_dist_val = float(max_distance.replace(" mi", ""))
 df = load_quests()
 
+# compute minutes from now for each quest using current local time
+now = datetime.now()
+parsed_starts = pd.to_datetime(df["start_time"], format="%I:%M %p").apply(
+    lambda t: t.replace(year=now.year, month=now.month, day=now.day)
+)
+df = df.copy()
+df["minutes_from_now"] = (parsed_starts - now).dt.total_seconds() / 60
+
+time_limits = {
+    "Right Now": 30,
+    "Next 2 Hours": 120,
+    "Tonight": 360,
+    "Tomorrow": None,
+}
+limit = time_limits[time_filter]
+
 filtered = df[df["distance_mi"] <= max_dist_val]
 if cat_filter != "All Types":
     filtered = filtered[filtered["category"] == cat_filter]
 filtered = filtered[filtered["spots_left"] > 0]
+if limit is not None:
+    filtered = filtered[filtered["minutes_from_now"] <= limit]
+else:
+    # tomorrow: quests more than 6 hours out
+    filtered = filtered[filtered["minutes_from_now"] > 360]
 
 st.divider()
 

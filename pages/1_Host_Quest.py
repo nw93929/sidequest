@@ -96,7 +96,7 @@ with preview_col:
                     st.caption("_No description._")
 
 with publish_col:
-    if st.button("Publish ✕", type="primary", use_container_width=True):
+    if st.button("Publish ⚔", type="primary", use_container_width=True):
         if not is_valid:
             st.error("**Title** and **Location** are required.")
         else:
@@ -127,7 +127,7 @@ with publish_col:
             st.success(f'**"{quest_title}"** is live! People nearby can see it.')
             st.balloons()
 
-st.caption("*Format: select a powerfield. Preview it to check — your quest'll be public once published.*")
+st.caption("Fill in the required fields above. Preview before publishing to double-check everything.")
 
 if st.session_state.hosted_quests:
     st.divider()

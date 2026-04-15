@@ -164,7 +164,7 @@ if already_joined:
         st.rerun()
 else:
     if quest["spots_left"] > 0:
-        if st.button("✕ Accept Quest", type="primary", use_container_width=True, key=f"join_detail_{quest['id']}"):
+        if st.button("⚔ Accept Quest", type="primary", use_container_width=True, key=f"join_detail_{quest['id']}"):
             st.session_state.joined_quests.append(quest["id"])
             if quest["id"] not in st.session_state.chat_messages:
                 st.session_state.chat_messages[quest["id"]] = [
