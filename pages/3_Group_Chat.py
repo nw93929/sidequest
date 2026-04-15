@@ -4,7 +4,7 @@ from quest_data import get_quest_dict
 from styles import apply_custom_style, render_top_bar, render_bottom_nav
 
 st.set_page_config(page_title="Chat | Sidequest", page_icon="⚔️", layout="centered")
-apply_custom_style()
+
 st.markdown("""
 <style>
     .chat-header {
@@ -80,46 +80,47 @@ else:
     chat_labels = [q["title"] for q in chat_quests]
 
     if len(available_chats) > 1:
-        selected_label = st.selectbox("Switch chat", options=chat_labels, label_visibility="collapsed")
-        idx = chat_labels.index(selected_label)
+        selected_label = st.selectbox("Switch chat", options=chat_labels,
+                                      label_visibility="collapsed", key="chat_selector")
+        selected_id = chat_ids[chat_labels.index(selected_label)]
     else:
-        idx = 0
+        selected_id = chat_ids[0]
 
-    selected_id = chat_ids[idx]
-    active_quest = chat_quests[idx]
+    if selected_id in quest_db:
+        active_quest = quest_db[selected_id]
+    else:
+        hosted_match = [q for q in st.session_state.hosted_quests if q["id"] == selected_id]
+        active_quest = hosted_match[0] if hosted_match else None
 
-    # dark header matching sketch
-    members = active_quest.get("spots_taken", "?")
-    st.markdown(
-        f"<div class='chat-header'>"
-        f"<span class='chat-header-title'>⚔️ {active_quest['title']}</span><br>"
-        f"<span class='chat-header-sub'>{members} members · Group {active_quest['start_time']}</span>"
-        f"</div>",
-        unsafe_allow_html=True,
-    )
+    if active_quest:
+        st.markdown(
+            f"<div style='background:#2c2c2e; color:white; padding:16px 20px; border-radius:12px; margin-bottom:12px;'>"
+            f"<strong style='font-size:1.2rem;'>⚔️ {active_quest['title']}</strong><br>"
+            f"<span style='font-size:0.85rem; color:#aaa;'>"
+            f"{active_quest.get('spots_taken', '?')} members · Starts {active_quest['start_time']}</span></div>",
+            unsafe_allow_html=True,
+        )
 
-    # green location bar
-    st.markdown(
-        f"<div class='loc-bar'>"
-        f"📍 {active_quest['location']} · {active_quest.get('distance_mi', 0)} mi · "
-        f"<em>Directions →</em></div>",
-        unsafe_allow_html=True,
-    )
+        st.markdown(
+            f"<div style='background:#e8f8e8; padding:10px 14px; border-radius:8px; margin-bottom:16px; "
+            f"font-size:0.9rem;'>"
+            f"📍 {active_quest['location']} · {active_quest.get('distance_mi', 0)} mi · "
+            f"<em>Directions →</em></div>",
+            unsafe_allow_html=True,
+        )
 
-    # seed messages
-    if selected_id not in st.session_state.chat_messages:
-        st.session_state.chat_messages[selected_id] = [
-            {
-                "sender": active_quest.get("host", "Host"),
-                "text": f"Welcome to {active_quest['title']}! See you soon.",
-                "time": "Earlier",
-                "is_host": True,
-            }
-        ]
+        if selected_id not in st.session_state.chat_messages:
+            st.session_state.chat_messages[selected_id] = [
+                {
+                    "sender": active_quest.get("host", "Host"),
+                    "text": f"Welcome to {active_quest['title']}! See you soon.",
+                    "time": "Earlier",
+                    "is_host": True,
+                }
+            ]
 
     messages = st.session_state.chat_messages[selected_id]
 
-    # chat bubbles
     for msg in messages:
         is_you = msg["sender"] == "You"
         sender = "You" if is_you else msg["sender"]
@@ -146,14 +147,13 @@ else:
                     unsafe_allow_html=True,
                 )
 
-    # input bar
-    st.write("")
-    input_col, send_col = st.columns([5, 1])
-    with input_col:
-        new_msg = st.text_input("msg", placeholder="Type a message...",
-                                key=f"chat_input_{selected_id}", label_visibility="collapsed")
-    with send_col:
-        send_pressed = st.button("Send", type="primary", key=f"send_{selected_id}")
+        st.write("")
+        input_col, send_col = st.columns([5, 1])
+        with input_col:
+            new_msg = st.text_input("msg", placeholder="Type a message...",
+                                    key=f"chat_input_{selected_id}", label_visibility="collapsed")
+        with send_col:
+            send_pressed = st.button("Send", type="primary", key=f"send_{selected_id}")
 
     if send_pressed and new_msg.strip():
         st.session_state.chat_messages[selected_id].append({

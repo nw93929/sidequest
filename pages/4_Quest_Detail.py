@@ -75,15 +75,12 @@ def load_quest_db():
 
 quest_db = load_quest_db()
 
-render_top_bar("Quest Detail")
-
-# quest picker
 quest_options = {qid: f"{q['title']} — {q['location']}" for qid, q in quest_db.items()}
-selected_label = st.selectbox("Select a quest", options=list(quest_options.values()), label_visibility="collapsed")
+selected_label = st.selectbox("Select a quest", options=list(quest_options.values()),
+                              label_visibility="collapsed", key="quest_picker")
 selected_id = list(quest_options.keys())[list(quest_options.values()).index(selected_label)]
 quest = quest_db[selected_id]
 
-# back / share header like the sketch
 st.markdown(
     "<div class='detail-header'>"
     "<span>← Back</span>"
@@ -92,49 +89,22 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# photo placeholder
-st.markdown("<div class='photo-placeholder'>Activity photo / icon</div>", unsafe_allow_html=True)
-
-# title
 st.markdown(f"## {quest['title']} @ {quest['location']}")
 st.write(f"Hosted by **{quest['host']}** · 🟢 Active now")
 
 st.divider()
 
-# when / where info boxes matching sketch
-when_col, where_col = st.columns(2)
-with when_col:
-    st.markdown(
-        "<div class='info-box'>"
-        "<div class='info-box-label'>WHEN</div>"
-        f"<div class='info-box-value'>Tonight, {quest['start_time']}</div>"
-        "</div>",
-        unsafe_allow_html=True,
-    )
-with where_col:
-    st.markdown(
-        "<div class='info-box'>"
-        "<div class='info-box-label'>WHERE</div>"
-        f"<div class='info-box-value'>{quest['distance_mi']} mi · {quest['location']}</div>"
-        "</div>",
-        unsafe_allow_html=True,
-    )
+info_left, info_right = st.columns(2)
+with info_left:
+    st.write("**WHEN**")
+    st.write(f"Tonight, {quest['start_time']}")
+with info_right:
+    st.write("**WHERE**")
+    st.write(f"{quest['distance_mi']} mi · {quest['location']}")
 
 st.divider()
 
-# attendees with avatar circles like the sketch
-st.markdown("<p class='field-label'>ATTENDEES</p>", unsafe_allow_html=True)
-
-mock_names = ["Jamie R.", "Alex T.", "Morgan K.", "Sam W.", "Riley P.", "Jordan B."]
-avatars_html = "<div class='avatar-row'>"
-for j in range(quest["spots_taken"]):
-    initials = "".join(w[0] for w in mock_names[j % len(mock_names)].split())
-    avatars_html += f"<div class='avatar'>{initials}</div>"
-avatars_html += "</div>"
-st.markdown(avatars_html, unsafe_allow_html=True)
-st.caption(f"{quest['spots_taken']} going · {quest['spots_left']} spots open")
-
-with st.expander("See full attendee list"):
+with st.expander(f"ATTENDEES · {quest['spots_taken']} going · {quest['spots_left']} spots open"):
     attendees = []
     for j in range(quest["spots_taken"]):
         name = mock_names[j % len(mock_names)]
@@ -142,10 +112,7 @@ with st.expander("See full attendee list"):
         attendees.append({"Name": name, "Role": role})
     st.table(pd.DataFrame(attendees))
 
-st.divider()
-
-# description
-st.markdown("<p class='field-label'>DESCRIPTION</p>", unsafe_allow_html=True)
+st.write("**DESCRIPTION**")
 st.write(quest["description"])
 
 # mini map placeholder like the sketch
@@ -153,7 +120,6 @@ st.markdown("<div class='map-placeholder'>📍 Mini Map Preview</div>", unsafe_a
 
 st.divider()
 
-# big accept / leave button at the bottom
 already_joined = quest["id"] in st.session_state.joined_quests
 
 if already_joined:
