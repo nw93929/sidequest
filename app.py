@@ -57,6 +57,22 @@ if "hosted_quests" not in st.session_state:
 if "chat_messages" not in st.session_state:
     st.session_state.chat_messages = {}
 
+# Initialize filter session state
+if "filter_time" not in st.session_state:
+    st.session_state.filter_time = "Tonight"
+if "filter_distance" not in st.session_state:
+    st.session_state.filter_distance = "5 mi"
+if "filter_category" not in st.session_state:
+    st.session_state.filter_category = "All Types"
+if "filter_subtype" not in st.session_state:
+    st.session_state.filter_subtype = "All"
+if "advanced_mode" not in st.session_state:
+    st.session_state.advanced_mode = False
+if "filter_host" not in st.session_state:
+    st.session_state.filter_host = "All Hosts"
+if "filter_min_spots" not in st.session_state:
+    st.session_state.filter_min_spots = 1
+
 
 @st.cache_data
 def load_quests():
@@ -192,7 +208,6 @@ with col_dist:
     max_distance = st.selectbox(
         "Distance",
         ["2 mi", "5 mi", "10 mi"],
-        index=1,
         key="filter_distance",
         label_visibility="collapsed",
     )
@@ -229,7 +244,7 @@ if advanced_mode:
         st.selectbox("Host", host_options, key="filter_host")
     with adv_col2:
         st.number_input(
-            "Min spots open", min_value=1, max_value=12, value=1,
+            "Min spots open", min_value=1, max_value=12,
             key="filter_min_spots",
         )
 

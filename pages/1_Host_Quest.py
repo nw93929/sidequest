@@ -2,10 +2,12 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, date, timedelta
 from quest_data import SUBCATEGORIES
+from styles import apply_custom_style, render_bottom_nav
 
 st.set_page_config(
     page_title="Host a Quest | Sidequest", page_icon="⚔️", layout="centered",
 )
+apply_custom_style()
 
 with st.sidebar:
     st.header("⚔️ Sidequest")

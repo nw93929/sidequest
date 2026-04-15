@@ -4,6 +4,7 @@ from quest_data import get_quest_dict
 from styles import apply_custom_style, render_top_bar, render_bottom_nav
 
 st.set_page_config(page_title="Chat | Sidequest", page_icon="⚔️", layout="centered")
+apply_custom_style()
 
 st.markdown("""
 <style>
