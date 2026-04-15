@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import requests
 import os
+from datetime import datetime
 
 try:
     from dotenv import load_dotenv
@@ -366,17 +367,25 @@ scatter_cats = st.multiselect(
 
 if not scatter_cats:
     st.warning("Pick at least one category to display the chart.")
-    st.stop()
+    # Create empty scatter plot instead of stopping execution
+    fig_scatter = px.scatter()
+    fig_scatter.update_layout(
+        title="No categories selected",
+        xaxis_title="Distance (mi)",
+        yaxis_title="Start Time",
+        height=350,
+        margin=dict(t=40, b=10)
+    )
+else:
+    scatter_df = df[df["category"].isin(scatter_cats)].copy()
+    scatter_df["parsed_time"] = pd.to_datetime(
+        scatter_df["start_time"], format="%I:%M %p",
+    )
+    scatter_df = scatter_df.sort_values("parsed_time")
 
-scatter_df = df[df["category"].isin(scatter_cats)].copy()
-scatter_df["parsed_time"] = pd.to_datetime(
-    scatter_df["start_time"], format="%I:%M %p",
-)
-scatter_df = scatter_df.sort_values("parsed_time")
-
-fig_scatter = px.scatter(
-    scatter_df, x="distance_mi", y="parsed_time",
-    color="category", size="spots_left",
+    fig_scatter = px.scatter(
+        scatter_df, x="distance_mi", y="parsed_time",
+        color="category", size="spots_left",
     labels={
         "distance_mi": "Distance (mi)",
         "parsed_time": "Start Time",

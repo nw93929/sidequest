@@ -3,6 +3,12 @@ import pandas as pd
 from quest_data import get_quest_dict
 from styles import apply_custom_style, render_top_bar, render_bottom_nav
 
+# Mock attendee names for demo purposes
+MOCK_ATTENDEE_NAMES = [
+    "Jamie R.", "Alex T.", "Morgan K.", "Sam W.", "Riley P.",
+    "Jordan B.", "Casey M.", "Quinn L.", "Dakota F.", "Avery S.",
+]
+
 st.set_page_config(page_title="Quest Detail | Sidequest", page_icon="⚔️", layout="centered")
 apply_custom_style()
 
@@ -107,7 +113,7 @@ st.divider()
 with st.expander(f"ATTENDEES · {quest['spots_taken']} going · {quest['spots_left']} spots open"):
     attendees = []
     for j in range(quest["spots_taken"]):
-        name = mock_names[j % len(mock_names)]
+        name = MOCK_ATTENDEE_NAMES[j % len(MOCK_ATTENDEE_NAMES)]
         role = "Host" if j == 0 else "Attendee"
         attendees.append({"Name": name, "Role": role})
     st.table(pd.DataFrame(attendees))

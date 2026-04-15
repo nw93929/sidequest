@@ -148,12 +148,14 @@ else:
                 )
 
         st.write("")
-        input_col, send_col = st.columns([5, 1])
-        with input_col:
-            new_msg = st.text_input("msg", placeholder="Type a message...",
-                                    key=f"chat_input_{selected_id}", label_visibility="collapsed")
-        with send_col:
-            send_pressed = st.button("Send", type="primary", key=f"send_{selected_id}")
+
+    # Input and send button outside the message loop
+    input_col, send_col = st.columns([5, 1])
+    with input_col:
+        new_msg = st.text_input("msg", placeholder="Type a message...",
+                                key=f"chat_input_{selected_id}", label_visibility="collapsed")
+    with send_col:
+        send_pressed = st.button("Send", type="primary", key=f"send_{selected_id}")
 
     if send_pressed and new_msg.strip():
         st.session_state.chat_messages[selected_id].append({

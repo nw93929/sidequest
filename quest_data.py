@@ -39,7 +39,7 @@ def build_quests():
         loc_name, dist = random.choice(locations)
         cat = random.choice(categories)
         subtype = random.choice(SUBCATEGORIES[cat])
-        hour_offset = random.choice([0.5, 1, 1.5, 2, 3, 4])
+        hour_offset = random.choice([0.5, 1, 1.5, 2, 3, 4, 8, 12, 24, 28])  # Include tomorrow's quests
         start = now + timedelta(hours=hour_offset)
         spots_total = random.randint(4, 12)
         spots_taken = random.randint(1, spots_total - 1)
