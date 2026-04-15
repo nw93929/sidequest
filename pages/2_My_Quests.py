@@ -54,7 +54,7 @@ st.markdown("# My Quests")
 view_mode = st.radio("View", options=["Active", "Past"], index=0, horizontal=True,
                      label_visibility="collapsed", key="my_quests_view")
 
-active_count = len(st.session_state.joined_quests) + len(st.session_state.hosted_quests)
+active_count = len(set(st.session_state.joined_quests + [q["id"] for q in st.session_state.hosted_quests]))
 tab_active, tab_past = st.tabs([f"Active ({active_count})", "Past"])
 
 with tab_active:

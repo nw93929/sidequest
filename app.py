@@ -338,7 +338,9 @@ col2.metric(
     "Open Spots",
     int(filtered["spots_left"].sum()) if len(filtered) > 0 else 0,
 )
-col3.metric("Joined", len(st.session_state.joined_quests))
+hosted_ids = {q["id"] for q in st.session_state.hosted_quests}
+joined_non_hosted = [qid for qid in st.session_state.joined_quests if qid not in hosted_ids]
+col3.metric("Joined", len(joined_non_hosted))
 
 with st.expander("View as table"):
     display_df = filtered[
