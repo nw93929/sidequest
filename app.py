@@ -11,6 +11,7 @@ except ImportError:
     pass
 
 from quest_data import get_quest_df, SUBCATEGORIES
+from styles import apply_custom_style, render_top_bar
 
 st.set_page_config(page_title="Sidequest", page_icon="⚔️", layout="centered")
 apply_custom_style()
