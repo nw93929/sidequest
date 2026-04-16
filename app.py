@@ -9,6 +9,7 @@ try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
+    print("python-dotenv not installed; skipping .env loading. Make sure to set environment variables manually.")
     pass
 
 from quest_data import get_quest_df, SUBCATEGORIES
@@ -19,7 +20,7 @@ apply_custom_style()
 
 st.markdown("""
 <style>
-    .block-container { max-width: 700px; padding-top: 1rem; }
+    .block-container { max-width: 700px; padding-top: 2rem; }
     div.stButton > button[kind="primary"] {
         background-color: #34C759;
         border: none;

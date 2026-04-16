@@ -100,16 +100,17 @@ def render_top_bar(title="⚔ <i>Sidequest</i>"):
 
 
 def render_bottom_nav(active_page="home"):
-    pages = [
-        ("home", "🏠", "Feed"),
-        ("host", "➕", "Host"),
-        ("quests", "⚔", "My Quests"),
-        ("chat", "💬", "Chat"),
-        ("detail", "🔍", "Detail"),
-    ]
-    items = ""
-    for key, icon, label in pages:
-        cls = "nav-item active" if key == active_page else "nav-item"
-        items += f"<div class='{cls}'><span class='nav-icon'>{icon}</span>{label}</div>"
+    pass # This doesn't really make sense on desktop and streamlit doesnt really work for mobile.
+    # pages = [
+    #     ("home", "🏠", "Feed"),
+    #     ("host", "➕", "Host"),
+    #     ("quests", "⚔", "My Quests"),
+    #     ("chat", "💬", "Chat"),
+    #     ("detail", "🔍", "Detail"),
+    # ]
+    # items = ""
+    # for key, icon, label in pages:
+    #     cls = "nav-item active" if key == active_page else "nav-item"
+    #     items += f"<div class='{cls}'><span class='nav-icon'>{icon}</span>{label}</div>"
 
-    st.markdown(f"<div class='bottom-nav'>{items}</div>", unsafe_allow_html=True)
+    # st.markdown(f"<div class='bottom-nav'>{items}</div>", unsafe_allow_html=True)
