@@ -32,7 +32,6 @@ render_top_bar("My Quests")
 with st.sidebar:
     st.header("⚔️ Sidequest")
     st.caption("Spontaneous local activities")
-    st.divider()
 
 if "joined_quests" not in st.session_state:
     st.session_state.joined_quests = []
