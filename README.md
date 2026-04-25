@@ -11,7 +11,7 @@ A Streamlit multipage app for discovering and joining spontaneous local activiti
 - **My Quests** (`pages/2_My_Quests.py`) — View active/past quests, leave or cancel
 - **Group Chat** (`pages/3_Group_Chat.py`) — Message your quest group without exchanging numbers
 - **Quest Detail** (`pages/4_Quest_Detail.py`) — Full detail view with join/leave actions
-- **Sidekick** (`pages/5_Sidekick.py`) — Gemini-powered in-app assistant that recommends quests, answers questions about the feed, etc.
+- **Sidekick** (`pages/5_Sidekick.py`) — Gemini-powered in-app assistant that recommends quests, provides quest-drafting advice, answers questions about the feed, etc.
 
 ## Setup
 
