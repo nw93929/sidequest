@@ -16,7 +16,7 @@ A Streamlit multipage app for discovering and joining spontaneous local activiti
 ## Setup
 
 1. `pip install -r requirements.txt`
-2. Create `.streamlit/secrets.toml` and add your Gemini API key (free at https://aistudio.google.com/apikey):
+2. Create `.streamlit/secrets.toml` and add your Gemini API key:
    ```toml
    [api]
    GEMINI_API_KEY = "your-key-here"
