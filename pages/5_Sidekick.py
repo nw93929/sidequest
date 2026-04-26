@@ -160,7 +160,7 @@ for msg in st.session_state.sidekick_messages:
         st.markdown(msg["content"])
 
 # --- Chat input ---
-prompt = st.chat_input("Ask for recommendations, updates about the feed, advice on drafting quests...")
+prompt = st.chat_input("How can I help?")
 
 if prompt:
     # Input validation: empty / whitespace-only
